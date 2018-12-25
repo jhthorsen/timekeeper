@@ -1,0 +1,96 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite -signatures;
+
+app->defaults(seo_description => 'Create a shareable timer.');
+
+get(
+  '/:epoch/:seconds' => {epoch => 0, seconds => 0},
+  sub ($c) {
+    my $stash = $c->stash;
+    $stash->{seo_canonical} = $c->req->url->to_abs;
+    $stash->{seo_icon}      = $c->url_for('/images/clock_ballonicon2.png')->to_abs;
+    $stash->{seo_site}      = $stash->{seo_canonical}->host;
+    $stash->{seo_site} =~ s!\w+\.([^\.]+).*!$1!;
+  },
+  'timer'
+);
+
+helper alarm_sound => sub ($c, $format) {
+  return $format;
+};
+
+helper seo => sub ($c, $for, $new_value = undef) {
+  my $stash = $c->stash;
+  $stash->{"seo_$for"} = $new_value if @_ == 3;
+  return $stash->{"seo_$for"} // '';
+};
+
+app->start;
+
+__DATA__
+@@ timer.html.ep
+% title 'Timer';
+% layout 'default';
+% my $index_url = url_for 'timer', {epoch => undef, seconds => undef};
+% my @classes = qw(timer-app);
+% push @classes, $seconds ? '-countdown' : '-set';
+%= form_for $index_url, class => join(' ', @classes), begin
+  <div class="hms">
+    %= number_field 'd', '0', class => 'hms_days', min => 0, max => 999, autocomplete => 'off'
+    <span class="help -days">days</span>
+    <span class="separator">:</span>
+
+    %= number_field 'h', '0', class => 'hms_hours', min => 0, max => 23, autocomplete => 'off'
+    <span class="help -hours">hours</span>
+    <span class="separator">:</span>
+
+    %= number_field 'm', '0', class => 'hms_minutes', min => 0, max => 59, autocomplete => 'off'
+    <span class="help -minutes">minutes</span>
+    <span class="separator">:</span>
+
+    %= number_field 's', '0', class => 'hms_seconds', min => 0, max => 59, autocomplete => 'off'
+    <span class="help -seconds">seconds</span>
+  </div>
+  <div class="progressbar"><div>&nbsp;</div></div>
+  <p class="description -set">Set a timer and press <button class="btn -link">play</button>.</p>
+  <p class="description -countdown">Set a new <%= link_to 'timer', $index_url, class => 'set' %>. Alarm is <a href="#toggle/alarm">off</a>.</p>
+  <p class="description -expired">The timer has expired. Set a new <%= link_to 'timer', $index_url, class => 'set' %>.</p>
+  <audio name="player" preload="auto" loop="true" class="alarm-sound">
+    <source src="<%= alarm_sound 'ogg' %>" type="audio/ogg"></source>
+    <source src="<%= alarm_sound 'mpeg' %>" type="audio/mpeg"></source>
+  </audio>
+% end
+@@ layouts/default.html.ep
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:description" content="<%= seo 'description' %>">
+  <meta name="twitter:image" content="<%= seo 'icon' %>">
+  <meta name="twitter:site" content="<%= seo 'site' %>">
+  <meta name="twitter:title" content="<%= title %>">
+  <meta name="twitter:url" content="<%= seo 'canonical' %>">
+  <meta property="og:description" content="<%= seo 'description' %>">
+  <meta property="og:determiner" content="a">
+  <meta property="og:image" content="<%= seo 'icon' %>">
+  <meta property="og:title" content="<%= title %>">
+  <meta property="og:url" content="<%= seo 'canonical' %>">
+  <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
+</head>
+<body>
+  %= content
+  <footer>
+    <span class="copyright">&copy; 2014-2018 Jan Henning Thorsen</span>
+    <span class="dash">-</span> <%= link_to 'About', 'about' %>
+    <span class="dash">-</span> <a href="#set:300">5 min</a>
+    <span class="dash">-</span> <a href="#set:600">10 min</a>
+    <span class="dash">-</span> <a href="#set:3600">1 hour</a>
+    <span class="dash">-</span> <a href="#set:480">Eggs</a>
+  </footer>
+</body>
+</html>
