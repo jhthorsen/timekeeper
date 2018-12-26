@@ -7,8 +7,6 @@ plugin 'Webpack' => {process => [qw(js css sass)]};
 
 app->defaults(seo_description => 'Create a shareable timer.');
 
-get '/about' => 'about';
-
 get(
   '/:epoch/:seconds' => {epoch => 0, seconds => 0},
   sub ($c) {
@@ -39,10 +37,51 @@ helper seo => sub ($c, $for, $new_value = undef) {
 app->start;
 
 __DATA__
-@@ about.html.ep
-% title 'About Timekeeper - Share your timer';
+@@ timer.html.ep
+% title 'Timekeeper - Share your timer';
 % layout 'default';
-<div id="about" class="content">
+% my $index_url = url_for 'timer', {epoch => undef, seconds => undef};
+% my @classes = qw(timer-app);
+% push @classes, $seconds ? '-countdown' : '-set';
+
+%= form_for $index_url, id => 'app', class => join(' ', @classes), begin
+  <h1 class="main-title"><a href="#about">Timekeeper</a></h1>
+  <section class="timer-app_fields">
+    %= number_field 'd', '0', class => 'timer-app_field -days', min => 0, max => 999, autocomplete => 'off'
+    <label class="timer-app_label -days">days</label>
+    <span class="timer-app_separator -days">:</span>
+
+    %= number_field 'h', '0', class => 'timer-app_field -hours', min => 0, max => 23, autocomplete => 'off'
+    <label class="timer-app_label -hours">hours</label>
+    <span class="timer-app_separator -hours">:</span>
+
+    %= number_field 'm', '0', class => 'timer-app_field -minutes', min => 0, max => 59, autocomplete => 'off'
+    <label class="timer-app_label -minutes">minutes</label>
+    <span class="timer-app_separator -minutes">:</span>
+
+    %= number_field 's', '0', class => 'timer-app_field -seconds', min => 0, max => 59, autocomplete => 'off'
+    <label class="timer-app_label -seconds">seconds</label>
+  </section>
+  <section class="timer-app_progressbar show-when -countdown hide"><div>&nbsp;</div></section>
+  <footer class="timer-app_footer show-when -set">
+    Set a timer and press play. <button class="btn"><i class="fas fa-play"></i></button>
+  </footer>
+  <footer class="timer-app_footer show-when -countdown hide">
+    <a href="<%= $index_url %>" class="btn set"><i class="fas fa-power-off"></i></a>
+    <a href="#toggle/alarm" class="btn"><i class="fas fa-bell"></i></a>
+    <a href="#about" class="btn"><i class="fas fa-info-circle"></i></a>
+  </footer>
+  <footer class="timer-app_footer show-when -expired hide">
+    The timer has expired.
+    <a href="<%= $index_url %>" class="btn set"><i class="fas fa-redo"></i></a>
+  </footer>
+  <audio name="player" preload="auto" loop="true" class="timer-app_sound">
+    <source src="<%= alarm_sound 'ogg' %>" type="audio/ogg"></source>
+    <source src="<%= alarm_sound 'mpeg' %>" type="audio/mpeg"></source>
+  </audio>
+% end
+
+<article id="about" class="article-about">
   <h1>About Timekeeper</h1>
   <p>
     Timekeeper is an app that allows you to create a shareable countdown timer.
@@ -53,7 +92,13 @@ __DATA__
   </p>
 
   <p class="text-center">
-    %= link_to 'Set a timer', 'timer', class => 'btn -cta -big'
+    <a href="#set:0" class="btn -big">Set a custom timer</a>
+  </p>
+  <p class="text-center">
+    <a href="#set:300" class="btn -secondary">5 min</a>
+    <a href="#set:600" class="btn -secondary">10 min</a>
+    <a href="#set:3600" class="btn -secondary">1 hour</a>
+    <a href="#set:480" class="btn -secondary">Eggs</a>
   </p>
 
   <h2>Story</h2>
@@ -78,44 +123,13 @@ __DATA__
   <p>
     <a href="https://github.com/jhthorsen/app-timekeeper">This program</a> is
     free software, you can redistribute it and/or modify it under the terms of
-    the Artistic License version 2.0.
+    the <a href="https://opensource.org/licenses/Artistic-2.0">Artistic License version 2.0</a>.
   </p>
+</article>
 
-  <h2>Author</h2>
-  <p>Jan Henning Thorsen - <a href="http://thorsen.pm">jhthorsen@cpan.org</a></p>
-<div>
-@@ timer.html.ep
-% title 'Timekeeper - Share your timer';
-% layout 'default';
-% my $index_url = url_for 'timer', {epoch => undef, seconds => undef};
-% my @classes = qw(timer-app);
-% push @classes, $seconds ? '-countdown' : '-set';
-%= form_for $index_url, class => join(' ', @classes), begin
-  <div class="hms">
-    %= number_field 'd', '0', class => 'hms_days', min => 0, max => 999, autocomplete => 'off'
-    <span class="help -days">days</span>
-    <span class="separator">:</span>
-
-    %= number_field 'h', '0', class => 'hms_hours', min => 0, max => 23, autocomplete => 'off'
-    <span class="help -hours">hours</span>
-    <span class="separator">:</span>
-
-    %= number_field 'm', '0', class => 'hms_minutes', min => 0, max => 59, autocomplete => 'off'
-    <span class="help -minutes">minutes</span>
-    <span class="separator">:</span>
-
-    %= number_field 's', '0', class => 'hms_seconds', min => 0, max => 59, autocomplete => 'off'
-    <span class="help -seconds">seconds</span>
-  </div>
-  <div class="progressbar"><div>&nbsp;</div></div>
-  <p class="description -set">Set a timer and press <button class="btn -link">play</button>.</p>
-  <p class="description -countdown">Set a new <%= link_to 'timer', $index_url, class => 'set' %>. Alarm is <a href="#toggle/alarm">off</a>.</p>
-  <p class="description -expired">The timer has expired. Set a new <%= link_to 'timer', $index_url, class => 'set' %>.</p>
-  <audio name="player" preload="auto" loop="true" class="alarm-sound">
-    <source src="<%= alarm_sound 'ogg' %>" type="audio/ogg"></source>
-    <source src="<%= alarm_sound 'mpeg' %>" type="audio/mpeg"></source>
-  </audio>
-% end
+<footer class="footer">
+  <p class="copyright">&copy; 2014-2018 &mdash; <a href="http://thorsen.pm">Jan Henning Thorsen</a></p>
+</footer>
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <html>
@@ -136,19 +150,12 @@ __DATA__
   <meta property="og:image" content="<%= seo 'icon' %>">
   <meta property="og:title" content="<%= title %>">
   <meta property="og:url" content="<%= seo 'canonical' %>">
-  <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
   %= asset 'timekeeper.css'
+  <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
 <body>
   %= content
-  <footer>
-    <span class="copyright">&copy; 2014-2018 Jan Henning Thorsen</span>
-    <span class="dash">-</span> <%= link_to 'About', 'about' %>
-    <span class="dash">-</span> <a href="#set:300">5 min</a>
-    <span class="dash">-</span> <a href="#set:600">10 min</a>
-    <span class="dash">-</span> <a href="#set:3600">1 hour</a>
-    <span class="dash">-</span> <a href="#set:480">Eggs</a>
-  </footer>
   %= asset 'timekeeper.js'
 </body>
 </html>

@@ -9,36 +9,31 @@ input[type="number"] {
 }
 
 .btn {
-  color: #f65b0b;
+  background: $btn-bg;
+  color: $btn-color;
   font-size: 1.1rem;
+  font-weight: 400;
   text-decoration: none;
-  border-radius: 2px;
+  border: 2px solid #563111;
+  padding: 0.3em 0.5em;
   cursor: pointer;
   display: inline-block;
 
-  &.-cta {
-    background: #f65b0b;
-    color: #eee;
-    font-weight: 400;
-    padding: 0.3em 0.5em;
-    box-shadow: 0 1px 0 1px darken(#f65b0b, 10%);
-
-    &:hover {
-      text-decoration: none;
-      background: darken(#f65b0b, 5%);
-    }
+  &:hover {
+    background: darken($btn-bg, 4%);
+    outline: 1px solid #d89357;
+    text-decoration: none;
   }
 
-  &.-link {
-    background: transparent;
-    border: 0;
-    display: inline;
-    padding: 0;
-    margin: 0;
+  &:focus {
+    border-color: transparent;
+    outline: 2px solid #d89357;
+  }
 
-    &:hover {
-      text-decoration: underline;
-    }
+  &.-secondary {
+    background: lighten($btn-bg, 50%);
+    color: inherit;
+    border: 0;
   }
 
   &.-big {

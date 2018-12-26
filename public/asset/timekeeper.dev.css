@@ -25,13 +25,17 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block; }
 
+html, body {
+  color: #333;
+  margin: 0;
+  padding: 0; }
+
 html, body, button, input {
   font-family: 'Droid Sans', sans-serif;
   font-size: 16px; }
 
 a {
-  color: #f65b0b;
-  text-decoration: none;
+  color: #b16f37;
   cursor: pointer; }
 
 a:hover {
@@ -39,11 +43,14 @@ a:hover {
 
 p {
   line-height: 1.5rem;
-  margin: 0.5rem 0; }
+  margin: 0.5rem 0 1rem 0; }
 
 h1, h2 {
   font-weight: bold;
   margin: 0.8em 0 0.1em 0; }
+  h1 a, h2 a {
+    color: inherit;
+    text-decoration: none; }
 
 h1 {
   font-size: 2.2rem; }
@@ -54,6 +61,9 @@ h2 {
 .text-center {
   text-align: center; }
 
+.hide {
+  display: none !important; }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -63,175 +73,159 @@ input[type="number"] {
   -moz-appearance: textfield; }
 
 .btn {
-  color: #f65b0b;
+  background: #9e5c23;
+  color: #ece2ce;
   font-size: 1.1rem;
+  font-weight: 400;
   text-decoration: none;
-  border-radius: 2px;
+  border: 2px solid #563111;
+  padding: 0.3em 0.5em;
   cursor: pointer;
   display: inline-block; }
-  .btn.-cta {
-    background: #f65b0b;
-    color: #eee;
-    font-weight: 400;
-    padding: 0.3em 0.5em;
-    box-shadow: 0 1px 0 1px #c74807; }
-    .btn.-cta:hover {
-      text-decoration: none;
-      background: #df5108; }
-  .btn.-link {
-    background: transparent;
-    border: 0;
-    display: inline;
-    padding: 0;
-    margin: 0; }
-    .btn.-link:hover {
-      text-decoration: underline; }
+  .btn:hover {
+    background: #8d521f;
+    outline: 1px solid #d89357;
+    text-decoration: none; }
+  .btn:focus {
+    border-color: transparent;
+    outline: 2px solid #d89357; }
+  .btn.-secondary {
+    background: #f4dfcc;
+    color: inherit;
+    border: 0; }
   .btn.-big {
     font-size: 1.3rem; }
 
-body {
-  background: #f8f6eb;
-  color: #5989b1;
-  margin: 0;
-  padding: 0; }
-
-footer {
-  text-align: center;
-  position: fixed;
-  bottom: 0.5rem;
-  left: 0;
-  right: 0; }
-
-footer, footer a {
-  font-size: 0.9rem;
-  color: #777; }
-
-footer a {
-  text-decoration: underline; }
-
-.content {
-  margin: 2rem auto;
-  padding: 0 1rem;
+.article-about {
+  margin: 0 auto;
+  padding: 1rem;
   max-width: 40rem; }
 
 .timer-app {
+  background-image: url(51e98c543993b59c1db0b5e0066abc27.jpeg);
+  background-size: cover;
+  background-position: 50% 50%;
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center; }
+  .timer-app .footer {
+    color: #caa98d;
+    text-align: center;
+    margin: 0;
+    display: none; }
+  .timer-app input,
+  .timer-app .timer-app_separator {
+    color: #cd8f1a;
+    font-size: 6rem;
+    line-height: 1em;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    display: inline-block; }
+  .timer-app input {
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid #a06f14;
+    width: 1.1em;
+    height: 1em;
+    text-align: right; }
+    .timer-app input.timer-app_field.-days {
+      width: 1.8em; }
+    .timer-app input:focus {
+      color: #f1cf8f;
+      border-color: #f1cf8f;
+      outline: none; }
+      .timer-app input:focus + label {
+        color: #f1cf8f; }
+    .timer-app input::selection {
+      background: transparent; }
+  .timer-app .btn {
+    border: 0; }
+  .timer-app.-countdown input,
+  .timer-app.-expired input {
+    border-bottom: 0; }
+  .timer-app.-expired input {
+    color: #a06f14; }
 
-.timer-app p {
-  color: #3774a7;
+.main-title {
+  background: rgba(23, 10, 2, 0.8);
+  color: #e5a835;
+  font-size: 1.6rem;
+  font-weight: 400;
   text-align: center;
-  margin: 0;
-  display: none; }
+  padding: 0.4rem 1rem;
+  margin: 0 0 0 calc(50% - 18rem);
+  width: 5.5em; }
 
-.timer-app .separator,
-.timer-app input {
-  font-size: 6rem;
-  line-height: 1em;
-  padding: 0;
-  margin: 0.5rem 0;
-  vertical-align: middle;
-  display: inline-block; }
-
-.timer-app .separator {
-  color: #3774a7; }
-
-.timer-app input {
-  color: #f65b0b;
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid #5496ce;
-  width: 1.1em;
-  height: 1em;
-  text-align: right; }
-
-.timer-app input:focus {
-  background: #e0c0af;
-  outline: none; }
-
-.timer-app input::selection {
-  background: transparent; }
-
-.timer-app .help {
-  color: #5496ce;
-  width: 1px;
-  position: relative;
-  top: -0.6rem; }
-
-.timer-app input.hms_days {
-  width: 1.8em; }
-
-.timer-app .help.-days {
-  left: -2.4em; }
-
-.timer-app .help.-hours {
-  left: -2.8em; }
-
-.timer-app .help.-minutes {
-  left: -3.8em; }
-
-.timer-app .help.-seconds {
-  left: -4em; }
-
-.hms {
+.timer-app_fields {
+  background: rgba(23, 10, 2, 0.8);
+  padding-top: 2.5rem;
   display: flex;
   justify-content: center; }
 
-.timer-app.-set .description.-set {
-  display: block; }
+.timer-app_label {
+  color: #a06f14;
+  width: 1px;
+  position: relative;
+  top: -1rem; }
+  .timer-app_label.-days {
+    left: -2.4em; }
+  .timer-app_label.-hours {
+    left: -2.8em; }
+  .timer-app_label.-minutes {
+    left: -3.8em; }
+  .timer-app_label.-seconds {
+    left: -4em; }
 
-.timer-app.-countdown .description.-countdown {
-  display: block; }
+.timer-app_progressbar {
+  background: #2f2106;
+  height: 0.5rem;
+  overflow: hidden; }
+  .timer-app_progressbar > div {
+    background: #b67f17;
+    transition: width 1s ease-in-out; }
 
-.timer-app.-expired .description.-expired {
-  display: block; }
-
-.timer-app.-expired .separator, .timer-app.-expired input {
-  color: #d6b29f; }
-
-.timer-app.-countdown input {
-  border-bottom-color: transparent; }
-
-.progressbar {
-  background: transparent;
-  height: 6px;
-  overflow: hidden;
-  margin: 1rem 0 1.5rem 0; }
-
-.timer-app.-countdown .progressbar {
-  background: #f65b0b; }
-
-.timer-app.-countdown .progressbar div {
-  background: #3774a7;
-  transition: width 1s ease-in-out; }
-
-.alarm {
+.timer-app_sound {
   visibility: hidden;
   height: 0;
   width: 0; }
 
+.timer-app_footer {
+  background: rgba(23, 10, 2, 0.8);
+  color: #a06f14;
+  text-align: center;
+  padding: 2rem 0 1.5rem 0; }
+
+.footer {
+  background: #faf3ec;
+  color: #7b4920;
+  border-top: 1px solid #f5e5d8;
+  padding: 1rem;
+  margin: 2rem auto 0 auto; }
+  .footer p {
+    margin: 0 auto;
+    max-width: 40rem; }
+
 @media (max-width: 700px) {
-  .hms .separator,
-  .hms input {
-    font-size: 2.8em; }
-  footer .dash {
-    display: none; }
-  footer a {
-    padding: 0 0.2em; }
-  footer .copyright:after {
-    content: "\00a0";
-    display: block; }
-  .timer-app .help {
+  .main-title {
+    margin: 0; }
+  .timer-app_label {
     font-size: 0.9rem; }
-  .timer-app .help.-days {
-    left: -2.1em; }
-  .timer-app .help.-hours {
-    left: -2.5em; }
-  .timer-app .help.-minutes {
-    left: -3.5em; }
-  .timer-app .help.-seconds {
-    left: -3.7em; } }
+    .timer-app_label.-days {
+      left: -2.1em; }
+    .timer-app_label.-hours {
+      left: -2.5em; }
+    .timer-app_label.-minutes {
+      left: -3.5em; }
+    .timer-app_label.-seconds {
+      left: -3.7em; }
+  .timer-app_fields {
+    padding-bottom: 0.5rem; }
+  .timer-app_footer {
+    padding: 1rem 0; }
+  .timer-app input,
+  .timer-app .timer-app_separator {
+    font-size: 2.8em; } }
 

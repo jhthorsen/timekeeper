@@ -31,6 +31,7 @@ class Timekeeper {
     });
 
     this.getAlarmPlayer().volume = 0.4; // The alarm sound is crazy loud
+    this._renderAlarmLink();
     this._startOrStop({});
     w.addEventListener("popstate", e => this._startOrStop(e));
 
@@ -42,10 +43,15 @@ class Timekeeper {
   }
 
   getAlarmPlayer() {
-    return q(this.formEl, ".alarm-sound", 1);
+    return q(this.formEl, ".timer-app_sound", 1);
+  }
+
+  getProgressbar() {
+    return q(this.formEl, ".timer-app_progressbar div", 1)
   }
 
   start(seconds, epoch) {
+    if (!seconds) return this.stop();
     if (!epoch) epoch = now();
     history.pushState({}, d.title, [this.baseUrl, epoch, seconds].join("/"));
     this._startTimer();
@@ -60,6 +66,10 @@ class Timekeeper {
     if (this.tracked[event]) return;
     ga("send", "event", "timer", event, seconds);
     this.tracked[event] = true;
+  }
+
+  _hideDays(flag) {
+    q(this.formEl, ".-days", el => el.classList[flag ? "add" : "remove"]("hide"))
   }
 
   _onBlur(target, e) {
@@ -99,7 +109,8 @@ class Timekeeper {
   _renderAlarmLink(toggle) {
     var state = localStorage.getItem("timer_alarm") || "off";
     if (toggle) state = state == "on" ? "off" : "on";
-    this.getAlarmBtn().innerText = state;
+    const icon = this.getAlarmBtn().querySelector(".fas");
+    icon.className = icon.className.replace(/fa-\S+/, state == "on" ? "fa-bell" : "fa-bell-slash");
     return state;
   }
 
@@ -107,14 +118,14 @@ class Timekeeper {
     var left = [0, 0, 0, this.ends - now()];
     var title = [];
 
-    q(this.formEl, ".progressbar div", 1).style.width
-      = (100 - (this.seconds - left[3]) / this.seconds * 100) + "%";
+    this.getProgressbar().style.width = (100 - (this.seconds - left[3]) / this.seconds * 100) + "%";
 
     if (left[3] <= 0) {
       if (this.tid) clearInterval(this.tid);
       setTimeout(() => { this.getAlarmPlayer().pause() }, 4000);
-      if (storage.getItem("timer_alarm") == "on") this.getAlarmPlayer().play();
-      this.state("expired");
+      if (localStorage.getItem("timer_alarm") == "on") this.getAlarmPlayer().play();
+      this.inputNames.forEach(name => { this.formEl[name].value = name == "d" ? "0" : "00" });
+      this._state("expired");
       return;
     }
 
@@ -134,16 +145,19 @@ class Timekeeper {
     this.formEl.h.value = pad(left[1]);
     this.formEl.m.value = pad(left[2]);
     this.formEl.s.value = pad(left[3]);
+    this._hideDays(left[0] ? false : true);
   }
 
   _renderExpired() {
     this._state("expired");
+    this._hideDays(true);
     this.inputNames.forEach(name => { this.formEl[name].value = name == "d" ? "0" : "00" });
     if (this.seconds) this._ga("expired", "" + this.seconds);
     return true;
   }
 
   _renderInputValues() {
+    this._hideDays(false);
     this.inputNames.forEach(name => {
       this.formEl[name].value = localStorage.getItem("timer_" + name) || (name == "d" ? "0" : "00");
     });
@@ -159,7 +173,7 @@ class Timekeeper {
     if (this.tid) clearInterval(this.tid);
     this._state("countdown");
     q(this.formEl, "input", el => { el.disabled = true });
-    q(d, 'a', 1).focus();
+    q(d, 'a.set', 1).focus();
     this.seconds = parseInt(args[2], 10);
     this.ends = parseInt(args[1], 10) + this.seconds;
     if (this.ends - now() <= 0) return this._renderExpired();
@@ -175,11 +189,13 @@ class Timekeeper {
     this._state("set");
     this._renderInputValues();
     q(this.formEl, "input", el => { el.disabled = false });
-    this.formEl.m.focus();
+    if (!location.href.match(/\#about/)) this.formEl.m.focus();
   }
 
-  _state(str) {
-    this.formEl.className = this.formEl.className.replace(/\s-\w+/, " -" + str);
+  _state(state) {
+    this.formEl.className = this.formEl.className.replace(/\s-\w+/, " -" + state);
+    q(this.formEl, ".show-when", el => el.classList.add("hide"));
+    q(this.formEl, ".show-when.-" + state, el => el.classList.remove("hide"));
   }
 }
 

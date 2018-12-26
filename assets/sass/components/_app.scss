@@ -1,0 +1,170 @@
+.article-about {
+  margin: 0 auto;
+  padding: 1rem;
+  max-width: 40rem;
+}
+
+.timer-app {
+  background-image: url(./../photo-1434704504321-71a8bc15a685.jpeg);
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .footer {
+    color: $timer-text-color;
+    text-align: center;
+    margin: 0;
+    display: none;
+  }
+
+  input,
+  .timer-app_separator {
+    color: $input-color;
+    font-size: 6rem;
+    line-height: 1em;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  input {
+    background: transparent;
+    border: 0;
+    border-bottom: 3px solid darken($input-color, 10%);
+    width: 1.1em;
+    height: 1em;
+    text-align: right;
+  
+    &.timer-app_field.-days {
+      width: 1.8em;
+    }
+
+    &:focus {
+      color: lighten($input-color, 30%);
+      border-color: lighten($input-color, 30%);
+      outline: none;
+
+      & + label {
+        color: lighten($input-color, 30%);
+      }
+    }
+
+    &::selection {
+      background: transparent;
+    }
+  }
+
+  .btn {
+    border: 0;
+  }
+
+  &.-countdown input,
+  &.-expired input {
+    border-bottom: 0;
+  }
+
+  &.-expired input {
+    color: darken($input-color, 10%);
+  }
+}
+
+.main-title {
+  background: rgba(23, 10, 2, 0.8);
+  color: lighten($input-color, 10%);
+  font-size: 1.6rem;
+  font-weight: 400;
+  text-align: center;
+  padding: 0.4rem 1rem;
+  margin: 0 0 0 calc(50% - 18rem);
+  width: 5.5em;
+}
+
+.timer-app_fields {
+  background: $timer-background;
+  padding-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.timer-app_label {
+  color: darken($input-color, 10%);
+  width: 1px;
+  position: relative;
+  top: -1rem;
+
+  &.-days { left: -2.4em; }
+  &.-hours { left: -2.8em; }
+  &.-minutes { left: -3.8em; }
+  &.-seconds { left: -4em; }
+}
+
+.timer-app_progressbar {
+  background: darken($input-color, 35%);
+  height: 0.5rem;
+  overflow: hidden;
+
+  > div {
+    background: darken($input-color, 5%);
+    transition: width 1s ease-in-out;
+  }
+}
+
+.timer-app_sound {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+.timer-app_footer {
+  background: $timer-background;
+  color: darken($input-color, 10%);
+  text-align: center;
+  padding: 2rem 0 1.5rem 0;
+}
+
+.footer {
+  background: lighten(#f5e5d8, 5%);
+  color: darken(#f5e5d8, 60%);
+  border-top: 1px solid #f5e5d8;
+  padding: 1rem;
+  margin: 2rem auto 0 auto;
+
+  p {
+    margin: 0 auto;
+    max-width: 40rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .main-title {
+    margin: 0;
+  }
+
+  .timer-app_label {
+    font-size: 0.9rem;
+    &.-days { left: -2.1em; }
+    &.-hours { left: -2.5em; }
+    &.-minutes { left: -3.5em; }
+    &.-seconds { left: -3.7em; }
+  }
+
+  .timer-app_fields {
+    padding-bottom: 0.5rem;
+  }
+
+  .timer-app_footer {
+    padding: 1rem 0;
+  }
+
+  .timer-app {
+    input,
+    .timer-app_separator {
+      font-size: 2.8em;
+    }
+  }
+}
