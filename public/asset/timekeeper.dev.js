@@ -86,14 +86,37 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./assets/js/timekeeper.js":
+/*!*********************************!*\
+  !*** ./assets/js/timekeeper.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("class Timekeeper {\n  constructor() {}\n\n}\n\n//# sourceURL=webpack:///./assets/js/timekeeper.js?");
+
+/***/ }),
+
+/***/ "./assets/sass/timekeeper.scss":
+/*!*************************************!*\
+  !*** ./assets/sass/timekeeper.scss ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./assets/sass/timekeeper.scss?");
+
+/***/ }),
+
 /***/ "./assets/timekeeper.js":
 /*!******************************!*\
   !*** ./assets/timekeeper.js ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-eval("console.log(\"Webpack is compiling my assets.\");\n\n//# sourceURL=webpack:///./assets/timekeeper.js?");
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _sass_timekeeper_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sass/timekeeper.scss */ \"./assets/sass/timekeeper.scss\");\n/* harmony import */ var _sass_timekeeper_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_sass_timekeeper_scss__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _js_timekeeper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/timekeeper.js */ \"./assets/js/timekeeper.js\");\n/* harmony import */ var _js_timekeeper_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_timekeeper_js__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\n//# sourceURL=webpack:///./assets/timekeeper.js?");
 
 /***/ })
 

@@ -83,6 +83,7 @@ __DATA__
   <meta property="og:title" content="<%= title %>">
   <meta property="og:url" content="<%= seo 'canonical' %>">
   <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
+  %= asset 'timekeeper.css'
 </head>
 <body>
   %= content
@@ -94,5 +95,6 @@ __DATA__
     <span class="dash">-</span> <a href="#set:3600">1 hour</a>
     <span class="dash">-</span> <a href="#set:480">Eggs</a>
   </footer>
+  %= asset 'timekeeper.js'
 </body>
 </html>

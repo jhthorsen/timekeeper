@@ -1,1 +1,2 @@
-console.log("Webpack is compiling my assets.");
+import "./sass/timekeeper.scss";
+import "./js/timekeeper.js";
