@@ -18,7 +18,7 @@ get(
 );
 
 helper alarm_sound => sub ($c, $format) {
-  return $format;
+  return shift->url_for("/sounds/alarm-clock-soundbible.com-437257341.$format");
 };
 
 helper seo => sub ($c, $for, $new_value = undef) {
