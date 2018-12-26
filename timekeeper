@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite -signatures;
 
+plugin 'Webpack' => {process => [qw(js css sass)]};
+
 app->defaults(seo_description => 'Create a shareable timer.');
 
 get(
