@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite -signatures;
 
+use Time::Duration 'ago_exact';
+
 plugin 'Webpack' => {process => [qw(js css sass)]};
 
 app->defaults(seo_description => 'Create a shareable timer.');
@@ -13,6 +15,11 @@ get(
     $stash->{seo_icon}      = $c->url_for('/images/clock_ballonicon2.png')->to_abs;
     $stash->{seo_site}      = $stash->{seo_canonical}->host;
     $stash->{seo_site} =~ s!\w+\.([^\.]+).*!$1!;
+
+    if (my $ends = $stash->{epoch} + $stash->{seconds}) {
+      $stash->{seo_description} = sprintf 'The timer expire%s %s', $ends > time ? 's' : 'd',
+        ago_exact(time - $ends);
+    }
   },
   'timer'
 );
@@ -31,7 +38,7 @@ app->start;
 
 __DATA__
 @@ timer.html.ep
-% title 'Timer';
+% title 'Timekeeper - Share your timer';
 % layout 'default';
 % my $index_url = url_for 'timer', {epoch => undef, seconds => undef};
 % my @classes = qw(timer-app);
