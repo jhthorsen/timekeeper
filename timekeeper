@@ -7,6 +7,8 @@ plugin 'Webpack' => {process => [qw(js css sass)]};
 
 app->defaults(seo_description => 'Create a shareable timer.');
 
+get '/about' => 'about';
+
 get(
   '/:epoch/:seconds' => {epoch => 0, seconds => 0},
   sub ($c) {
@@ -37,6 +39,51 @@ helper seo => sub ($c, $for, $new_value = undef) {
 app->start;
 
 __DATA__
+@@ about.html.ep
+% title 'About Timekeeper - Share your timer';
+% layout 'default';
+<div id="about" class="content">
+  <h1>About Timekeeper</h1>
+  <p>
+    Timekeeper is an app that allows you to create a shareable countdown timer.
+  </p>
+  <p>
+    Simply copy and paste the URL in your browser to a friend or coworker,
+    after <%= link_to 'setting the timer', 'timer' %>.
+  </p>
+
+  <p class="text-center">
+    %= link_to 'Set a timer', 'timer', class => 'btn -cta -big'
+  </p>
+
+  <h2>Story</h2>
+  <p>
+    John tells his coworker Jane: <i>"I'll have it done in ten minutes!"</i>
+  </p>
+  <p>
+    Jane replies: <i>"Yeah, right..."</i>
+  </p>
+  <p>
+    John creates a timer and shares the link with Jane, so she can make fun of
+    him after ten minutes have gone.
+  </p>
+
+  <h2>Idea</h2>
+  <p>
+    The idea came when my friend kept saying "Yeah, right", and I wanted to
+    prove I could do "something" in the amount of time that I had promised.
+  </p>
+
+  <h2>Copyright and license</h2>
+  <p>
+    <a href="https://github.com/jhthorsen/app-timekeeper">This program</a> is
+    free software, you can redistribute it and/or modify it under the terms of
+    the Artistic License version 2.0.
+  </p>
+
+  <h2>Author</h2>
+  <p>Jan Henning Thorsen - <a href="http://thorsen.pm">jhthorsen@cpan.org</a></p>
+<div>
 @@ timer.html.ep
 % title 'Timekeeper - Share your timer';
 % layout 'default';

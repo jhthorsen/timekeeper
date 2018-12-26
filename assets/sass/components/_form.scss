@@ -10,8 +10,24 @@ input[type="number"] {
 
 .btn {
   color: #f65b0b;
+  font-size: 1.1rem;
   text-decoration: none;
+  border-radius: 2px;
   cursor: pointer;
+  display: inline-block;
+
+  &.-cta {
+    background: #f65b0b;
+    color: #eee;
+    font-weight: 400;
+    padding: 0.3em 0.5em;
+    box-shadow: 0 1px 0 1px darken(#f65b0b, 10%);
+
+    &:hover {
+      text-decoration: none;
+      background: darken(#f65b0b, 5%);
+    }
+  }
 
   &.-link {
     background: transparent;
@@ -23,5 +39,9 @@ input[type="number"] {
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  &.-big {
+    font-size: 1.3rem;
   }
 }
