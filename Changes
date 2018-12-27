@@ -1,6 +1,7 @@
 Revision history for perl distribution App-timekeeper
 
 0.02 Not Released
+ - Add support for X-Request-Base
  - Only bundle production files
  - Bump M::P::Webpack to 0.05
 
