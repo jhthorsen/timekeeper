@@ -18,4 +18,4 @@ RUN apk add -U perl perl-io-socket-ssl \
 ENV MOJO_MODE production
 EXPOSE 8080
 
-ENTRYPOINT ["/app-timekeeper-master/script/timekeeper", "prefork", "-l", "http://*:8080"]
+ENTRYPOINT ["/app-timekeeper-master/timekeeper", "prefork", "-l", "http://*:8080"]

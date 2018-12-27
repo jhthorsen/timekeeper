@@ -1,4 +1,6 @@
 Revision history for perl distribution App-timekeeper
 
-0.01 Not Released
- - Started project
+0.01 2018-12-27T11:55:23+0900
+ - Add timer app
+ - Add /:epoch/:seconds route
+ - Add about section
