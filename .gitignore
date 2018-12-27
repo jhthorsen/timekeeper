@@ -15,3 +15,5 @@
 /MYMETA*
 /pm_to_blib
 /node_modules
+public/asset/*.dev.*
+public/asset/webpack.development.html

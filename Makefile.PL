@@ -10,7 +10,7 @@ my %WriteMakefileArgs = (
   BUILD_REQUIRES => {},
   TEST_REQUIRES  => {'Test::More' => '0.88'},
   PREREQ_PM =>
-    {'Mojolicious' => '8.00', 'Mojolicious::Plugin::Webpack' => '0.04', 'Time::Duration' => '1.00'},
+    {'Mojolicious' => '8.00', 'Mojolicious::Plugin::Webpack' => '0.05', 'Time::Duration' => '1.00'},
   META_MERGE => {
     'dynamic_config' => 0,
     'meta-spec'      => {version => 2},
