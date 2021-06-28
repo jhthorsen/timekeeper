@@ -52,6 +52,7 @@ __DATA__
 
 %= form_for $index_url, id => 'app', class => join(' ', @classes), begin
   <a href="#about" class="countdown-icon"><img alt="Timekeeper" src="<%= seo 'icon' %>"></a>
+  <div class="countdown-about">Create a shareable <a href="#about">timer</a>.</div>
 
   <section class="countdown-fields">
     <div class="countdown-fields__field for-days" data-shadow="000">
