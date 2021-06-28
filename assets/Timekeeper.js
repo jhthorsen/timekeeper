@@ -89,7 +89,7 @@ export default class Timekeeper {
 
   _renderAlarmLink() {
     const text = this.alarmActive() ? 'Disable' : 'Enable';
-    q(this.formEl, '[href="#alarm"]', icon => (icon.textContent = text));
+    q(this.formEl, '[href="#alarm"]', icon => (icon.textContent = icon.textContent.replace(/Enable|Disable/, () => text)));
   }
 
   _renderCountdown() {

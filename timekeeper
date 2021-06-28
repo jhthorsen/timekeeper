@@ -65,7 +65,7 @@ __DATA__
     </div>
     <div class="countdown-fields__field for-minutes" data-shadow="00">
       <label>minutes</label>
-      %= number_field 'm', '0', min => 0, max => 59, autocomplete => 'off'
+      %= number_field 'm', '10', min => 0, max => 59, autocomplete => 'off'
     </div>
     <div class="countdown-fields__field for-seconds" data-shadow="00">
       <label>seconds</label>
@@ -77,8 +77,9 @@ __DATA__
     Set a timer and press <a href="#start:0">start</a>.
   </div>
   <div class="countdown-footer for-countdown hide">
-    <a href="#alarm">Enable</a> alarm.
-    <a href="#stop">Stop</a> timer.
+    <a href="#alarm">Enable sound</a>
+    -
+    <a href="#stop">Stop timer</a>
   </div>
   <div class="countdown-footer for-expired hide">
     <span class="expired-text">The timer has expired.</span>
@@ -98,11 +99,11 @@ __DATA__
   </p>
   <p>
     Simply copy and paste the URL in your browser to a friend or coworker,
-    after <%= link_to 'setting the timer', 'timer' %>.
+    after setting the timer.
   </p>
 
   <p>
-    Set a custom timer:
+    Here are some predefined timers:
     <a href="#start:300">5 min</a>,
     <a href="#start:600">10 min</a>,
     <a href="#start:3600">1 hour</a> or
@@ -119,12 +120,6 @@ __DATA__
   <p>
     John creates a timer and shares the link with Jane, so she can make fun of
     him after ten minutes have gone.
-  </p>
-
-  <h2>Idea</h2>
-  <p>
-    The idea came when my friend kept saying "Yeah, right", and I wanted to
-    prove I could do "something" in the amount of time that I had promised.
   </p>
 
   <h2>Copyright and license</h2>
