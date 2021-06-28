@@ -88,8 +88,8 @@ export default class Timekeeper {
   }
 
   _renderAlarmLink() {
-    const name = this.alarmActive() ? 'fa-bell' : 'fa-bell-slash';
-    q(this.formEl, '[href="#alarm"] .fas', icon => (icon.className = icon.className.replace(/fa-\S+/, name)));
+    const text = this.alarmActive() ? 'Disable' : 'Enable';
+    q(this.formEl, '[href="#alarm"]', icon => (icon.textContent = text));
   }
 
   _renderCountdown() {

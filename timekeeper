@@ -76,13 +76,12 @@ __DATA__
     Set a timer and press <a href="#start:0">start</a>.
   </div>
   <div class="countdown-footer for-countdown hide">
-    <a href="#stop"><i class="fas fa-power-off"></i></a>
-    <a href="#alarm"><i class="fas fa-bell"></i></a>
-    <a href="#about"><i class="fas fa-info-circle"></i></a>
+    <a href="#alarm">Enable</a> alarm.
+    <a href="#stop">Stop</a> timer.
   </div>
   <div class="countdown-footer for-expired hide">
     <span class="expired-text">The timer has expired.</span>
-    <a href="#stop"><i class="fas fa-redo"></i></a>
+    <a href="#stop">Set</a> a timer.
   </div>
 
   <audio class="alarm-player" name="player" preload="auto" loop="true">
@@ -160,7 +159,6 @@ __DATA__
   <meta property="og:url" content="<%= seo 'canonical' %>">
   %= asset 'app-timekeeper.css'
   <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
 <body>
   %= content
