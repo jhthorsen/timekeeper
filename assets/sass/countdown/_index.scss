@@ -76,7 +76,7 @@
   }
 
   &:after {
-    content: '00';
+    content: attr(data-shadow);
     font-size: var(--input-font-size);
     line-height: 1em;
     vertical-align: text-bottom;
