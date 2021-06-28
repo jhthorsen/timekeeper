@@ -47,47 +47,52 @@ __DATA__
 % title 'Timekeeper - Share your timer';
 % layout 'default';
 % my $index_url = url_for 'timer', {epoch => undef, seconds => undef};
-% my @classes = qw(timer-app);
-% push @classes, $seconds ? '-countdown' : '-set';
+% my @classes = qw(countdown);
+% push @classes, $seconds ? 'is-counting-down' : 'has-set';
 
 %= form_for $index_url, id => 'app', class => join(' ', @classes), begin
-  <h1 class="main-title"><a href="#about">Timekeeper</a></h1>
-  <section class="timer-app_fields">
-    %= number_field 'd', '0', class => 'timer-app_field -days', min => 0, max => 999, autocomplete => 'off'
-    <label class="timer-app_label -days">days</label>
-    <span class="timer-app_separator -days">:</span>
+  <a href="#about" class="countdown-icon"><img alt="Timekeeper" src="<%= seo 'icon' %>"></a>
 
-    %= number_field 'h', '0', class => 'timer-app_field -hours', min => 0, max => 23, autocomplete => 'off'
-    <label class="timer-app_label -hours">hours</label>
-    <span class="timer-app_separator -hours">:</span>
-
-    %= number_field 'm', '0', class => 'timer-app_field -minutes', min => 0, max => 59, autocomplete => 'off'
-    <label class="timer-app_label -minutes">minutes</label>
-    <span class="timer-app_separator -minutes">:</span>
-
-    %= number_field 's', '0', class => 'timer-app_field -seconds', min => 0, max => 59, autocomplete => 'off'
-    <label class="timer-app_label -seconds">seconds</label>
+  <section class="countdown-fields">
+    <div class="countdown-fields__field for-days">
+      <label>days</label>
+      %= number_field 'd', '0', min => 0, max => 999, autocomplete => 'off'
+    </div>
+    <div class="countdown-fields__field for-hours">
+      <label>hours</label>
+      %= number_field 'h', '0', min => 0, max => 23, autocomplete => 'off'
+    </div>
+    <div class="countdown-fields__field for-minutes">
+      <label>minutes</label>
+      %= number_field 'm', '0', min => 0, max => 59, autocomplete => 'off'
+    </div>
+    <div class="countdown-fields__field for-seconds">
+      <label>seconds</label>
+      %= number_field 's', '0', min => 0, max => 59, autocomplete => 'off'
+    </div>
   </section>
-  <section class="timer-app_progressbar show-when -countdown hide"><div>&nbsp;</div></section>
-  <footer class="timer-app_footer show-when -set">
-    Set a timer and press play. <button class="btn"><i class="fas fa-play"></i></button>
-  </footer>
-  <footer class="timer-app_footer show-when -countdown hide">
+
+  <section class="progressbar hide"><div>&nbsp;</div></section>
+
+  <div class="countdown-footer for-set">
+    Set a timer and press <a href="#start">play</a>.
+  </div>
+  <div class="countdown-footer for-actions hide">
     <a href="<%= $index_url %>" class="btn set"><i class="fas fa-power-off"></i></a>
     <a href="#toggle/alarm" class="btn"><i class="fas fa-bell"></i></a>
     <a href="#about" class="btn"><i class="fas fa-info-circle"></i></a>
-  </footer>
-  <footer class="timer-app_footer show-when -expired hide">
+  </div>
+  <div class="countdown-footer for-expired hide">
     The timer has expired.
     <a href="<%= $index_url %>" class="btn set"><i class="fas fa-redo"></i></a>
-  </footer>
-  <audio name="player" preload="auto" loop="true" class="timer-app_sound">
+  </div>
+  <audio name="player" preload="auto" loop="true">
     <source src="<%= alarm_sound 'ogg' %>" type="audio/ogg"></source>
     <source src="<%= alarm_sound 'mpeg' %>" type="audio/mpeg"></source>
   </audio>
 % end
 
-<article id="about" class="article-about">
+<article id="about">
   <h1>About Timekeeper</h1>
   <p>
     Timekeeper is an app that allows you to create a shareable countdown timer.
@@ -97,14 +102,12 @@ __DATA__
     after <%= link_to 'setting the timer', 'timer' %>.
   </p>
 
-  <p class="text-center">
-    <a href="#set:0" class="btn -big">Set a custom timer</a>
-  </p>
-  <p class="text-center">
-    <a href="#set:300" class="btn -secondary">5 min</a>
-    <a href="#set:600" class="btn -secondary">10 min</a>
-    <a href="#set:3600" class="btn -secondary">1 hour</a>
-    <a href="#set:480" class="btn -secondary">Eggs</a>
+  <p>
+    Set a custom timer:
+    <a href="#set:300">5 min</a>,
+    <a href="#set:600">10 min</a>,
+    <a href="#set:3600">1 hour</a> or
+    <a href="#set:480">perfect eggs</a>.
   </p>
 
   <h2>Story</h2>
