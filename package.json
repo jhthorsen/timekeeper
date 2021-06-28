@@ -1,24 +1,37 @@
 {
-  "name": "timekeeper",
-  "description": "",
-  "version": "0.0.1",
-  "devDependencies": {},
-  "dependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
-    "babel-loader": "^8.0.4",
-    "css-loader": "^2.1.0",
-    "file-loader": "^3.0.1",
-    "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.5.0",
-    "node-sass": "^4.11.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "sass-loader": "^7.1.0",
-    "terser-webpack-plugin": "^1.2.0",
-    "uglifyjs-webpack-plugin": "^2.1.0",
-    "url-loader": "^1.1.2",
-    "webpack": "^4.28.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-md5-hash": "0.0.6"
+  "name": "app-timekeeper",
+  "version": "1.0.0",
+  "description": "App::timekeeper - Create shareable timer",
+  "main": "webpack.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhthorsen/app-timekeeper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jhthorsen/app-timekeeper/issues"
+  },
+  "homepage": "https://github.com/jhthorsen/app-timekeeper#readme",
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.6",
+    "css-minimizer-webpack-plugin": "^3.0.2",
+    "mini-css-extract-plugin": "^1.6.1",
+    "sass": "^1.35.1",
+    "sass-loader": "^12.1.0",
+    "terser-webpack-plugin": "^5.1.4",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.7.2"
   }
 }
