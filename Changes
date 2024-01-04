@@ -1,6 +1,6 @@
 Revision history for perl distribution App-timekeeper
 
-0.90 Not Released
+1.00 2023-01-04T10:43:00+0900
  - Stop depending on Webpack
  - Stop depending on Google fonts
  - Moved from docker hub to github registry
