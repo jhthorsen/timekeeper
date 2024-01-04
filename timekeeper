@@ -3,8 +3,6 @@ use Mojolicious::Lite -signatures;
 
 use Time::Duration 'ago_exact';
 
-plugin 'Webpack' => {process => [qw(js sass)]};
-
 app->defaults(seo_description => 'Create a shareable timer.');
 
 get(
@@ -25,12 +23,12 @@ get(
 );
 
 helper alarm_sound => sub ($c, $format) {
-  return shift->url_for("/sounds/alarm-clock-soundbible.com-437257341.$format");
+  return $c->url_for("/sounds/alarm-clock-soundbible.com-437257341.$format");
 };
 
 helper seo => sub ($c, $for, $new_value = undef) {
   my $stash = $c->stash;
-  $stash->{"seo_$for"} = $new_value if @_ == 3;
+  $stash->{"seo_$for"} = $new_value if $new_value;
   return $stash->{"seo_$for"} // '';
 };
 
@@ -133,6 +131,382 @@ __DATA__
 <footer class="footer">
   <p class="copyright">&copy; 2014-<%= 1900 + +(localtime)[5] %> &mdash; <a href="http://thorsen.pm">Jan Henning Thorsen</a></p>
 </footer>
+@@ assets/timekeeper.css.ep
+@font-face {
+  font-family: 'Share Tech Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sharetechmono/v10/J7aHnp1uDWRBEqV98dVQztYldFcLowEFA87Heg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --body-bg: #061b21;
+  --font-size: 18px;
+  --font-family-monospace: "Share Tech Mono", monospace;
+  --font-color: #c5c5c5;
+  --link-color: #daf6ff;
+  --input-color: #daf6ff;
+  --gutter-small: 0.5rem;
+  --gutter: 1rem;
+}
+
+.hide {
+  display: none;
+}
+
+html,
+body {
+  background-color: var(--body-bg);
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+article,
+footer {
+  margin: 4rem auto 3rem auto;
+  padding: 1rem var(--gutter);
+  max-width: 34rem;
+}
+
+img {
+  vertical-align: middle;
+  max-width: 100%;
+}
+
+html,
+body {
+  color: var(--font-color);
+  font-size: var(--font-size);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.5em;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link-color);
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+p {
+  line-height: 1.5em;
+  margin-top: 1rem 0 0.5rem 0;
+}
+
+h1, h2 {
+  font-family: var(--font-family-monospace);
+  font-weight: 400;
+  color: var(--link-color);
+  padding: 0;
+  margin: 3rem 0 0.5rem 0;
+  line-height: 1.2em;
+}
+
+h1 {
+  font-size: calc(var(--font-size) * 1.1 + 1.4vw);
+}
+
+h2 {
+  font-size: calc(var(--font-size) + 1.6vw);
+}
+
+.countdown {
+  font-family: var(--font-family-monospace);
+  background-color: #04181e;
+  height: 90vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.countdown-fields {
+  display: flex;
+  justify-content: center;
+}
+
+.countdown-fields__field {
+  --input-width: 12vw;
+  --input-font-size: 10vw;
+
+  @media (max-width: 30rem) {
+    --input-width: 60px;
+    --input-font-size: 3rem;
+  }
+
+  text-align: right;
+  margin: 0 0.8rem;
+  padding-top: 4rem;
+  flex: 0 1 var(--input-width);
+  position: relative;
+  z-index: 1;
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+
+    @media (max-width: 30rem) {
+      font-size: 0.8rem;
+    }
+  }
+
+  input {
+    font-family: var(--font-family-monospace);
+    font-size: var(--input-font-size);
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--input-color);
+    border: 2px solid rgba(100, 100, 100, 0.1);
+    padding: 0 0.2rem;
+    margin: 0;
+    width: 100%;
+    height: 1em;
+    line-height: 1em;
+    text-align: right;
+    vertical-align: text-bottom;
+    transition: background 0.2s ease-in-out;
+
+    &[type="number"] {
+      -moz-appearance: textfield;
+      -webkit-appearance: textfield;
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    &:focus,
+    &:focus-visible {
+      background: rgba(0, 0, 0, 0.9);
+      outline: none;
+    }
+
+    &::selection {
+      background: rgba(0, 0, 0, 0.9);
+      outline: none;
+    }
+  }
+
+  &:after {
+    content: attr(data-shadow);
+    font-size: var(--input-font-size);
+    line-height: 1em;
+    vertical-align: text-bottom;
+    display: block;
+    position: absolute;
+    right: -0.25rem;
+    bottom: 0.3rem;
+    z-index: -1;
+    opacity: 0.2;
+  }
+
+  &.for-days {
+    flex-basis: calc(1.5 * var(--input-width));
+  }
+}
+
+.countdown-about {
+  text-align: center;
+  padding: 1em 0;
+  opacity: 0.6;
+}
+
+.countdown-footer {
+  text-align: center;
+  padding: 1em 0;
+  min-height: 2.2rem;
+}
+
+.countdown-icon {
+  position: absolute;
+  top: 2rem;
+  left: calc(50% - 1rem);
+  opacity: 0.7;
+  transition: opacity 0.3s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  img {
+    width: 2rem;
+  }
+}
+@@ assets/timekeeper.js.ep
+const DAY = 86400, HOUR = 3600, MINUTE = 60;
+const on = (el, type, cb) => el.addEventListener(type, e => { e.preventDefault(); cb(e); });
+const now = () => parseInt(new Date().valueOf() / 1000, 10);
+
+function q(parentEl, sel, cb) {
+  const els = sel == ':children' ? parentEl.children : parentEl.querySelectorAll(sel);
+  if (!cb) return [].slice.call(els, 0);
+  const res = [];
+  for (let i = 0; i < els.length; i++) res.push(cb(els[i], i));
+  return res;
+}
+
+class Timekeeper {
+  constructor() {
+    this.inputNames = ['d', 'h', 'm', 's'];
+    this.tracked = {};
+  }
+
+  attach(formEl) {
+    this.baseUrl = formEl.action.replace(/\/+$/, '');
+    this.formEl = formEl;
+    this.alarmPlayer = q(this.formEl, '.alarm-player')[0];
+
+    this.inputNames.forEach(name => {
+      q(formEl, '[name="' + name + '"]', input => {
+        this._renderInput(input, input.value);
+        input.addEventListener('blur', e => this._onBlur(input, e));
+        input.addEventListener('keydown', e => this._onKeydown(input, e));
+      });
+    });
+
+    this.alarmPlayer.volume = 0.4; // The alarm sound is crazy loud
+    this._renderAlarmLink();
+    this._startOrStop({});
+
+    on(this.formEl, 'submit', () => this.start());
+    window.addEventListener('popstate', e => this._startOrStop(e));
+
+    return this;
+  }
+
+  alarmActive() {
+    return localStorage.getItem('timer_alarm') != 'off';
+  }
+
+  inputsToSeconds() {
+    const formEl = this.formEl;
+    return parseInt(formEl.d.value.replace(/^0+/, '') || 0, 10) * DAY
+      + parseInt(formEl.h.value.replace(/^0+/, '') || 0, 10) * HOUR
+      + parseInt(formEl.m.value.replace(/^0+/, '') || 0, 10) * MINUTE
+      + parseInt(formEl.s.value.replace(/^0+/, '') || 0, 10);
+  }
+
+  start(seconds, epoch = now()) {
+    seconds = parseInt(seconds, 10) || this.inputsToSeconds();
+
+    if (seconds) {
+      history.pushState({}, document.title, [this.baseUrl, epoch, seconds].join('/'));
+      window.scrollTo(0, 0);
+      setTimeout(() => q(document, '[href="#stop"]', el => el.focus()), 100);
+    }
+
+    this._startOrStop({});
+  }
+
+  stop() {
+    if (this.tid) clearInterval(this.tid);
+    if (location.href.match(/\/(\d+)\/(\d+)/)) history.pushState({}, document.title, this.baseUrl);
+    this._state('edit');
+    this.inputNames.forEach(name => this._renderInput(this.formEl[name], localStorage.getItem('timer_' + name) || '0'));
+    if (!location.href.match(/\#about/)) this.formEl.m.focus();
+  }
+
+  toggleAlarm() {
+    localStorage.setItem('timer_alarm', this.alarmActive() ? 'off' : 'on');
+    this._renderAlarmLink();
+  }
+
+  _onBlur(input, e) {
+    if (!input.value.length) this._renderInput(input, '0');
+    localStorage.setItem('timer_' + input.name, input.value);
+  }
+
+  _onKeydown(input, e) {
+    if (input.disabled) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return; // Do not want to capture special keys
+    if (e.keyCode == 13) return [e.preventDefault(), this.start()];
+
+    const num = (e.keyCode || e.which) - 48; // Convert keycode to {0..9}
+    if (num < 0 || num > 9) return; // Tab, delete, ... is not a number
+
+    e.preventDefault();
+    const max = input.getAttribute('max');
+    const v = input.value.length >= max.length ? num : parseInt(input.value + '' + num, 10);
+    this._renderInput(input, v > max ? max : v < 0 ? 0 : v);
+  }
+
+  _renderAlarmLink() {
+    const text = this.alarmActive() ? 'Disable' : 'Enable';
+    q(this.formEl, '[href="#alarm"]', icon => (icon.textContent = icon.textContent.replace(/Enable|Disable/, () => text)));
+  }
+
+  _renderCountdown() {
+    const formEl = this.formEl;
+    const left = [0, 0, 0, this.ends - now()];
+    const title = [];
+
+    if (left[3] <= 0) {
+      if (this.tid) clearInterval(this.tid);
+      setTimeout(() => this.alarmPlayer.pause(), 4000);
+      if (this.alarmActive()) this.alarmPlayer.play();
+      this.inputNames.forEach(name => this._renderInput(formEl[name], '0'));
+      this._state('expired');
+      return;
+    }
+
+    left[0] = parseInt(left[3] / DAY, 10);
+    left[3] -= left[0] * DAY;
+    left[1] = parseInt(left[3] / HOUR, 10);
+    left[3] -= left[1] * HOUR;
+    left[2] = parseInt(left[3] / MINUTE, 10);
+    left[3] -= left[2] * MINUTE;
+
+    for (let i = 0; i < left.length; i++) {
+      if (left[i] || title.length) title.push(left[i] + this.inputNames[i]);
+    }
+
+    document.title = title.join(' ');
+    this._renderInput(formEl.d, left[0]);
+    this._renderInput(formEl.h, left[1]);
+    this._renderInput(formEl.m, left[2]);
+    this._renderInput(formEl.s, left[3]);
+  }
+
+  _renderInput(input, val) {
+    val = String(val);
+    const wrapper = input.closest('[data-shadow]');
+    wrapper.dataset.shadow = val.padStart(input.name == 'd' ? 3 : 2, '0');
+    input.value = val;
+  }
+
+  _startOrStop() {
+    if (this.tid) clearInterval(this.tid);
+
+    const [all, epoch, seconds] = location.href.match(/\/(\d+)\/(\d+)/) || [];
+    this.seconds = parseInt(seconds, 10);
+    this.ends = parseInt(epoch, 10) + this.seconds;
+    if (!this.ends) return this.stop();
+    if (this.ends - now() <= 0) return this._state('expired');
+
+    this._state('countdown');
+    this._renderCountdown();
+    this.tid = setInterval(() => this._renderCountdown(), 1000);
+  }
+
+  _state(state) {
+    if (state == 'edit') q(document, '[property="og:title"]', el => (document.title = el.content));
+    if (state == 'expired') q(document, '.expired-text', el => (document.title = el.textContent));
+    this.formEl.className = this.formEl.className.replace(/\s-\w+/, ' -' + state);
+    q(this.formEl, 'input', el => (el.disabled = state == 'countdown'));
+    q(this.formEl, '.countdown-footer', el => el.classList.add('hide'));
+    q(this.formEl, '.countdown-footer.for-' + state, el => el.classList.remove('hide'));
+  }
+}
+
 @@ layouts/default.html.ep
 <!DOCTYPE html>
 <html>
@@ -153,11 +527,20 @@ __DATA__
   <meta property="og:image" content="<%= seo 'icon' %>">
   <meta property="og:title" content="<%= title %>">
   <meta property="og:url" content="<%= seo 'canonical' %>">
-  %= asset 'app-timekeeper.css'
+  %= stylesheet begin
+    %== $c->render_to_string('assets/timekeeper', format => 'css')
+  % end
   <link rel="shortcut icon" href="<%= seo 'icon' %>" type="image/png">
 </head>
 <body>
   %= content
-  %= asset 'app-timekeeper.js'
+  %= javascript begin
+    %== $c->render_to_string('assets/timekeeper', format => 'js')
+    const t = new Timekeeper();
+    t.attach(document.querySelector('form'));
+    q(document, 'a[href$="#alarm"]', el => on(el, 'click', e => t.toggleAlarm(e)));
+    q(document, 'a[href^="#start:"]', el => on(el, 'click', () => t.start(el.href.split('#start:')[1])));
+    q(document, 'a[href^="#stop"]', el => on(el, 'click', () => t.stop()));
+  % end
 </body>
 </html>
