@@ -21,14 +21,14 @@
   <style>/*<![CDATA[*/
 
 :root {
-  --body-bg: #002A32;
+  --body-color: 190, 100%, 10%;
   --body-font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   --hx-font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
   --input-font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   --font-size: 18px;
-  --font-color: #f5dfbb;
-  --link-color: #7cafc4;
-  --input-color: #7cafc4;
+  --font-color: 37, 74%, 85%;
+  --link-color: 198, 38%, 63%;
+  --input-color: 198, 38%, 63%;
   --gutter-small: 0.5rem;
   --gutter: 1rem;
 }
@@ -39,8 +39,8 @@
 
 html,
 body {
-  background-color: var(--body-bg);
-  color: var(--font-color);
+  background-color: hsl(var(--body-color));
+  color: hsl(var(--font-color));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-family: var(--body-font-family);
   font-size: var(--font-size);
@@ -67,7 +67,7 @@ img {
 }
 
 a {
-  color: var(--link-color);
+  color: hsl(var(--link-color));
 
   &:hover {
     text-decoration: none;
@@ -82,7 +82,7 @@ p {
 h1, h2 {
   font-family: var(--hx-font-family);
   font-weight: 400;
-  color: var(--link-color);
+  color: hsl(var(--link-color));
   padding: 0;
   margin: 3rem 0 0.5rem 0;
   line-height: 1.2em;
@@ -139,7 +139,7 @@ h2 {
     font-family: var(--input-font-family);
     font-size: var(--input-font-size);
     background: rgba(0, 0, 0, 0.2);
-    color: var(--input-color);
+    color: hsl(var(--input-color));
     border: 2px solid rgba(100, 100, 100, 0.1);
     padding: 0 0.2rem;
     margin: 0;
@@ -148,7 +148,6 @@ h2 {
     line-height: 1em;
     text-align: right;
     vertical-align: text-bottom;
-    transition: background 0.2s ease-in-out;
 
     &[type="number"] {
       -moz-appearance: textfield;
@@ -163,12 +162,15 @@ h2 {
 
     &:focus,
     &:focus-visible {
-      background: rgba(0, 0, 0, 0.9);
+      color: hsla(var(--font-color), 0.9);
       outline: none;
+      background: rgba(0, 0, 0, 0.9);
+      animation: input-pulse 1.5s ease-in-out infinite;
     }
 
     &::selection {
-      background: rgba(0, 0, 0, 0.9);
+      background: hsla(var(--body-color), 0.1);
+      color: hsla(var(--font-color), 1);
       outline: none;
     }
   }
@@ -198,6 +200,12 @@ h2 {
 .countdown-status {
   text-align: center;
 }
+
+@keyframes input-pulse {
+  0% { background: rgba(0, 0, 0, 0.9); }
+  50% { background: rgba(0, 0, 0, 0.4); }
+  100% { background: rgba(0, 0, 0, 0.9); }
+}
 /*]]>*/</style>
 </head>
 <body>
@@ -209,7 +217,7 @@ h2 {
     </p>
 
     <p class="countdown-status for-edit hide">
-      Input values below and press <a href="#start:0">start</a>.
+      Input <a href="#edit">values</a> below and press <a href="#start:0">start</a>.
     </p>
     <p class="countdown-status for-countdown hide">
       <a href="#alarm">Enable sound</a>
@@ -292,11 +300,9 @@ const on = (el, type, cb) => el.addEventListener(type, e => { e.preventDefault()
 const now = () => parseInt(new Date().valueOf() / 1000, 10);
 
 function q(parentEl, sel, cb) {
+  if (!cb) [parentEl, sel, cb] = [document, parentEl, sel];
   const els = sel == ':children' ? parentEl.children : parentEl.querySelectorAll(sel);
-  if (!cb) return [].slice.call(els, 0);
-  const res = [];
-  for (let i = 0; i < els.length; i++) res.push(cb(els[i], i));
-  return res;
+  for (let i = 0; i < els.length; i++) cb(els[i], i);
 }
 
 class Timekeeper {
@@ -308,7 +314,7 @@ class Timekeeper {
   attach(formEl) {
     this.baseUrl = formEl.action.split('#')[0].split('?')[0].replace(/\/+$/, '');
     this.formEl = formEl;
-    this.alarmPlayer = q(this.formEl, '.alarm-player')[0];
+    q(this.formEl, '.alarm-player', el => (this.alarmPlayer = el));
 
     this.inputNames.forEach(name => {
       q(formEl, '[name="' + name + '"]', input => {
@@ -324,6 +330,12 @@ class Timekeeper {
 
     on(this.formEl, 'submit', () => this.start());
     window.addEventListener('popstate', e => this._startOrStop(e));
+
+    q('a[href$="#alarm"]', el => on(el, 'click', e => t.toggleAlarm(e)));
+    q('a[href^="#start:"]', el => on(el, 'click', () => t.start(el.href.split('#start:')[1])));
+    q('a[href^="#stop"]', el => on(el, 'click', () => t.stop()));
+    q('a[href^="#edit"]', el => on(el, 'click', () => this.formEl.m.focus()));
+    q('a[href="#edit"]', el => el.focus());
 
     return this;
   }
@@ -346,7 +358,7 @@ class Timekeeper {
     if (seconds) {
       history.replaceState({}, document.title, `${this.baseUrl}?${seconds}/${epoch}`);
       window.scrollTo(0, 0);
-      setTimeout(() => q(document, '[href="#stop"]', el => el.focus()), 100);
+      setTimeout(() => q('[href="#stop"]', el => el.focus()), 100);
     }
 
     this._startOrStop({});
@@ -357,7 +369,6 @@ class Timekeeper {
     if (location.href.match(/(\d+)\/(\d+)/)) history.pushState({}, document.title, this.baseUrl);
     this._state('edit');
     this.inputNames.forEach(name => this._renderInput(this.formEl[name], localStorage.getItem('timer_' + name) || '0'));
-    if (location.hash != '#about') this.formEl.m.focus();
   }
 
   toggleAlarm() {
@@ -386,7 +397,7 @@ class Timekeeper {
 
   _renderAlarmLink() {
     const text = this.alarmActive() ? 'Disable' : 'Enable';
-    q(this.formEl, '[href="#alarm"]', icon => (icon.textContent = icon.textContent.replace(/Enable|Disable/, () => text)));
+    q(this.formEl, '[href="#alarm"]', el => (el.textContent = el.textContent.replace(/Enable|Disable/, () => text)));
   }
 
   _renderCountdown() {
@@ -443,8 +454,8 @@ class Timekeeper {
   }
 
   _state(state) {
-    if (state == 'edit') q(document, '[property="og:title"]', el => (document.title = el.content));
-    if (state == 'expired') q(document, '.expired-text', el => (document.title = el.textContent));
+    if (state == 'edit') q('[property="og:title"]', el => (document.title = el.content));
+    if (state == 'expired') q('.expired-text', el => (document.title = el.textContent));
     this.formEl.className = this.formEl.className.replace(/\s-\w+/, ' -' + state);
     q(this.formEl, 'input', el => (el.disabled = state == 'countdown'));
     q(this.formEl, '.countdown-status', el => el.classList.add('hide'));
@@ -452,11 +463,6 @@ class Timekeeper {
   }
 }
 
-    const t = new Timekeeper();
-    t.attach(document.querySelector('form'));
-    q(document, 'a[href$="#alarm"]', el => on(el, 'click', e => t.toggleAlarm(e)));
-    q(document, 'a[href^="#start:"]', el => on(el, 'click', () => t.start(el.href.split('#start:')[1])));
-    q(document, 'a[href^="#stop"]', el => on(el, 'click', () => t.stop()));
-
+const t = new Timekeeper().attach(document.querySelector('form'));
 //]]></script></body>
 </html>
