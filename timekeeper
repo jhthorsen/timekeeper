@@ -132,19 +132,12 @@ __DATA__
   <p class="copyright">&copy; 2014-<%= 1900 + +(localtime)[5] %> &mdash; <a href="http://thorsen.pm">Jan Henning Thorsen</a></p>
 </footer>
 @@ assets/timekeeper.css.ep
-@font-face {
-  font-family: 'Share Tech Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(https://fonts.gstatic.com/s/sharetechmono/v10/J7aHnp1uDWRBEqV98dVQztYldFcLowEFA87Heg.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 :root {
   --body-bg: #061b21;
+  --body-font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+  --hx-font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --input-font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   --font-size: 18px;
-  --font-family-monospace: "Share Tech Mono", monospace;
   --font-color: #c5c5c5;
   --link-color: #daf6ff;
   --input-color: #daf6ff;
@@ -159,6 +152,12 @@ __DATA__
 html,
 body {
   background-color: var(--body-bg);
+  color: var(--font-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: var(--body-font-family);
+  font-size: var(--font-size);
+  line-height: 1.5em;
+  -webkit-font-smoothing: antialiased;
   padding: 0;
   margin: 0;
 }
@@ -179,15 +178,6 @@ img {
   max-width: 100%;
 }
 
-html,
-body {
-  color: var(--font-color);
-  font-size: var(--font-size);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  line-height: 1.5em;
-  -webkit-font-smoothing: antialiased;
-}
-
 a {
   color: var(--link-color);
 
@@ -202,7 +192,7 @@ p {
 }
 
 h1, h2 {
-  font-family: var(--font-family-monospace);
+  font-family: var(--hx-font-family);
   font-weight: 400;
   color: var(--link-color);
   padding: 0;
@@ -219,7 +209,6 @@ h2 {
 }
 
 .countdown {
-  font-family: var(--font-family-monospace);
   background-color: #04181e;
   height: 90vh;
   width: 100vw;
@@ -229,6 +218,7 @@ h2 {
 }
 
 .countdown-fields {
+  font-family: var(--input-font-family);
   display: flex;
   justify-content: center;
 }
@@ -259,7 +249,7 @@ h2 {
   }
 
   input {
-    font-family: var(--font-family-monospace);
+    font-family: var(--input-font-family);
     font-size: var(--input-font-size);
     background: rgba(0, 0, 0, 0.2);
     color: var(--input-color);
