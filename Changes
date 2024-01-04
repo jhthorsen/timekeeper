@@ -1,5 +1,8 @@
 Revision history for perl distribution App-timekeeper
 
+1.01 Not Released
+ - Going back to basics using just a single HTML file
+
 1.00 2023-01-04T10:43:00+0900
  - Stop depending on Webpack
  - Stop depending on Google fonts
