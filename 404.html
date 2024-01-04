@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Share your timer soon...</title>
+  <meta http-equiv="refresh" content="1;URL='https://timer.thorsen.pm'">
+  <script>
+    const [_, a, b] = location.href.match(/(\d+)\/(\d+)/) || [];
+    if (a && b) {
+      const epoch = a > b ? a : b;
+      const seconds = a > b ? b : a;
+      location.href = 'https://timer.thorsen.pm?' + seconds + '/' + epoch;
+    }
+    else {
+      location.href = 'https://timer.thorsen.pm#about';
+    }
+  </script>
+</head>
+<body>
+  <a href="/">404</a>
+</body>
+</html>

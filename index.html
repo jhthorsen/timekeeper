@@ -8,15 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:description" content="Create a shareable timer.">
-  <meta name="twitter:image" content="http://127.0.0.1:3000/images/clock_ballonicon2.png">
+  <meta name="twitter:image" content="https://timer.thorsen.pm/images/clock_ballonicon2.png">
   <meta name="twitter:site" content="0">
   <meta name="twitter:title" content="Share your timer">
-  <meta name="twitter:url" content="http://127.0.0.1:3000/">
+  <meta name="twitter:url" content="https://timer.thorsen.pm/">
   <meta property="og:description" content="Create a shareable timer.">
   <meta property="og:determiner" content="a">
-  <meta property="og:image" content="http://127.0.0.1:3000/images/clock_ballonicon2.png">
+  <meta property="og:image" content="https://timer.thorsen.pm/images/clock_ballonicon2.png">
   <meta property="og:title" content="Share your timer">
-  <meta property="og:url" content="http://127.0.0.1:3000/">
+  <meta property="og:url" content="https://timer.thorsen.pm/">
+  <link rel="shortcut icon" href="https://timer.thorsen.pm/images/clock_ballonicon2.png" type="image/png">
   <style>/*<![CDATA[*/
 
     :root {
@@ -219,12 +220,11 @@ h2 {
   }
 }
 /*]]>*/</style>
-  <link rel="shortcut icon" href="http://127.0.0.1:3000/images/clock_ballonicon2.png" type="image/png">
 </head>
 <body>
   
 <form method="get" class="countdown has-set" id="app">
-  <a href="#about" class="countdown-icon"><img alt="Timekeeper" src="http://127.0.0.1:3000/images/clock_ballonicon2.png"></a>
+  <a href="#about" class="countdown-icon"><img alt="Timekeeper" src="https://timer.thorsen.pm/images/clock_ballonicon2.png"></a>
   <div class="countdown-about">Create a shareable <a href="#about">timer</a>.</div>
 
   <section class="countdown-fields">
@@ -292,19 +292,19 @@ h2 {
   </p>
   <p>
     John creates a timer and shares the link with Jane, so she can make fun of
-    him after ten minutes have gone.
+    him after ten minutes has gone by.
   </p>
 
   <h2>Copyright and license</h2>
   <p>
-    <a href="https://github.com/jhthorsen/app-timekeeper">This program</a> is
+    <a href="https://github.com/jhthorsen/timekeeper">This program</a> is
     free software, you can redistribute it and/or modify it under the terms of
-    the <a href="https://opensource.org/licenses/Artistic-2.0">Artistic License version 2.0</a>.
+    the MIT License.
   </p>
 </article>
 
 <footer class="footer">
-  <p class="copyright">&copy; 2014-2024 &mdash; <a href="http://thorsen.pm">Jan Henning Thorsen</a></p>
+  <p class="copyright">&copy; <a href="http://thorsen.pm">Jan Henning Thorsen</a></p>
 </footer>
 <script>//<![CDATA[
 const DAY = 86400, HOUR = 3600, MINUTE = 60;
@@ -326,7 +326,7 @@ class Timekeeper {
   }
 
   attach(formEl) {
-    this.baseUrl = formEl.action.replace(/\/+$/, '');
+    this.baseUrl = formEl.action.split('?')[0].replace(/\/+$/, '');
     this.formEl = formEl;
     this.alarmPlayer = q(this.formEl, '.alarm-player')[0];
 
@@ -364,7 +364,7 @@ class Timekeeper {
     seconds = parseInt(seconds, 10) || this.inputsToSeconds();
 
     if (seconds) {
-      history.pushState({}, document.title, [this.baseUrl, epoch, seconds].join('/'));
+      history.replaceState({}, document.title, `${this.baseUrl}?${seconds}/${epoch}`);
       window.scrollTo(0, 0);
       setTimeout(() => q(document, '[href="#stop"]', el => el.focus()), 100);
     }
@@ -374,10 +374,10 @@ class Timekeeper {
 
   stop() {
     if (this.tid) clearInterval(this.tid);
-    if (location.href.match(/\/(\d+)\/(\d+)/)) history.pushState({}, document.title, this.baseUrl);
+    if (location.href.match(/(\d+)\/(\d+)/)) history.pushState({}, document.title, this.baseUrl);
     this._state('edit');
     this.inputNames.forEach(name => this._renderInput(this.formEl[name], localStorage.getItem('timer_' + name) || '0'));
-    if (!location.href.match(/\#about/)) this.formEl.m.focus();
+    if (location.hash != '#about') this.formEl.m.focus();
   }
 
   toggleAlarm() {
@@ -451,7 +451,7 @@ class Timekeeper {
   _startOrStop() {
     if (this.tid) clearInterval(this.tid);
 
-    const [all, epoch, seconds] = location.href.match(/\/(\d+)\/(\d+)/) || [];
+    const [_, seconds, epoch] = location.href.match(/(\d+)\/(\d+)/) || [];
     this.seconds = parseInt(seconds, 10);
     this.ends = parseInt(epoch, 10) + this.seconds;
     if (!this.ends) return this.stop();
