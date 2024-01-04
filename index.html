@@ -20,15 +20,15 @@
   <link rel="shortcut icon" href="https://timer.thorsen.pm/images/clock_ballonicon2.png" type="image/png">
   <style>/*<![CDATA[*/
 
-    :root {
-  --body-bg: #061b21;
+:root {
+  --body-bg: #002A32;
   --body-font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
   --hx-font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
   --input-font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
   --font-size: 18px;
-  --font-color: #c5c5c5;
-  --link-color: #daf6ff;
-  --input-color: #daf6ff;
+  --font-color: #f5dfbb;
+  --link-color: #7cafc4;
+  --input-color: #7cafc4;
   --gutter-small: 0.5rem;
   --gutter: 1rem;
 }
@@ -76,7 +76,7 @@ a {
 
 p {
   line-height: 1.5em;
-  margin-top: 1rem 0 0.5rem 0;
+  margin: 0 0 1rem 0;
 }
 
 h1, h2 {
@@ -97,16 +97,16 @@ h2 {
 }
 
 .countdown {
-  background-color: #04181e;
-  height: 90vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .countdown-fields {
   font-family: var(--input-font-family);
+  padding-block: 10vh 20vh;
   display: flex;
   justify-content: center;
 }
@@ -193,38 +193,39 @@ h2 {
 
 .countdown-about {
   text-align: center;
-  padding: 1em 0;
-  opacity: 0.6;
 }
 
-.countdown-footer {
+.countdown-status {
   text-align: center;
-  padding: 1em 0;
-  min-height: 2.2rem;
-}
-
-.countdown-icon {
-  position: absolute;
-  top: 2rem;
-  left: calc(50% - 1rem);
-  opacity: 0.7;
-  transition: opacity 0.3s ease-in-out;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  img {
-    width: 2rem;
-  }
 }
 /*]]>*/</style>
 </head>
 <body>
   
 <form method="get" class="countdown has-set" id="app">
-  <a href="#about" class="countdown-icon"><img alt="Timekeeper" src="https://timer.thorsen.pm/images/clock_ballonicon2.png"></a>
-  <div class="countdown-about">Create a shareable <a href="#about">timer</a>.</div>
+  <header>
+    <p class="countdown-about">
+      On this page you can create a timer and <a href="#about">share it</a> with a link.
+    </p>
+
+    <p class="countdown-status for-edit hide">
+      Input values below and press <a href="#start:0">start</a>.
+    </p>
+    <p class="countdown-status for-countdown hide">
+      <a href="#alarm">Enable sound</a>
+      -
+      <a href="#stop">Stop timer</a>
+    </p>
+    <p class="countdown-status for-expired hide">
+      <span class="expired-text">The timer has expired.</span>
+      <a href="#stop">Set</a> a timer.
+    </p>
+
+    <audio class="alarm-player" name="player" preload="auto" loop="true">
+      <source src="/sounds/alarm-clock-soundbible.com-437257341.ogg" type="audio/ogg"></source>
+      <source src="/sounds/alarm-clock-soundbible.com-437257341.mpeg" type="audio/mpeg"></source>
+    </audio>
+  </header>
 
   <section class="countdown-fields">
     <div class="countdown-fields__field for-days" data-shadow="000">
@@ -244,34 +245,14 @@ h2 {
       <input autocomplete="off" max="59" min="0" name="s" type="number" value="0">
     </div>
   </section>
-
-  <div class="countdown-footer for-edit hide">
-    Set a timer and press <a href="#start:0">start</a>.
-  </div>
-  <div class="countdown-footer for-countdown hide">
-    <a href="#alarm">Enable sound</a>
-    -
-    <a href="#stop">Stop timer</a>
-  </div>
-  <div class="countdown-footer for-expired hide">
-    <span class="expired-text">The timer has expired.</span>
-    <a href="#stop">Set</a> a timer.
-  </div>
-
-  <audio class="alarm-player" name="player" preload="auto" loop="true">
-    <source src="/sounds/alarm-clock-soundbible.com-437257341.ogg" type="audio/ogg"></source>
-    <source src="/sounds/alarm-clock-soundbible.com-437257341.mpeg" type="audio/mpeg"></source>
-  </audio>
 </form>
 
 <article id="about">
   <h1>Timekeeper</h1>
   <p>
-    Timekeeper is an app that allows you to create a shareable countdown timer.
-  </p>
-  <p>
-    Simply copy and paste the URL in your browser to a friend or coworker,
-    after setting the timer.
+    Timekeeper is an app that enables you to create a shareable countdown timer.
+    Simply copy and paste the URL in your browser to a friend or coworker, after
+    setting the timer.
   </p>
 
   <p>
@@ -290,7 +271,7 @@ h2 {
     Jane replies: <i>"Yeah, right..."</i>
   </p>
   <p>
-    John creates a timer and shares the link with Jane, so she can make fun of
+    John creates a timer and shares the link with Jane, so <i>she</i> can make fun of
     him after ten minutes has gone by.
   </p>
 
@@ -466,8 +447,8 @@ class Timekeeper {
     if (state == 'expired') q(document, '.expired-text', el => (document.title = el.textContent));
     this.formEl.className = this.formEl.className.replace(/\s-\w+/, ' -' + state);
     q(this.formEl, 'input', el => (el.disabled = state == 'countdown'));
-    q(this.formEl, '.countdown-footer', el => el.classList.add('hide'));
-    q(this.formEl, '.countdown-footer.for-' + state, el => el.classList.remove('hide'));
+    q(this.formEl, '.countdown-status', el => el.classList.add('hide'));
+    q(this.formEl, '.countdown-status.for-' + state, el => el.classList.remove('hide'));
   }
 }
 
