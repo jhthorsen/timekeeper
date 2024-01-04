@@ -306,7 +306,7 @@ class Timekeeper {
   }
 
   attach(formEl) {
-    this.baseUrl = formEl.action.split('?')[0].replace(/\/+$/, '');
+    this.baseUrl = formEl.action.split('#')[0].split('?')[0].replace(/\/+$/, '');
     this.formEl = formEl;
     this.alarmPlayer = q(this.formEl, '.alarm-player')[0];
 
